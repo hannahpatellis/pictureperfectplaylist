@@ -1,7 +1,7 @@
 {
-  "name": "pictureperfectplaylists",
+  "name": "pictureperfectplaylist",
   "version": "1.0.0",
-  "description": "PicturePerfectPlaylists create playlists from uploaded photos",
+  "description": "PicturePerfectPlaylist creates playlists from uploaded photos",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
