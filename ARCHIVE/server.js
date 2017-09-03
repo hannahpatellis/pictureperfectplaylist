@@ -8,8 +8,10 @@ var env = require('dotenv').load()
 var PORT = process.env.PORT || 8080;
 
 //For BodyParser
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.text());
+app.use(bodyParser.json({ type: "application/vnd.api+json" }));
 
 // For Passport
 app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true })); // session secret
@@ -20,26 +22,20 @@ app.use(passport.session()); // persistent login session
 var models = require("./app/models");
 
 //Routes
-require('./app/routes/api-routes.js')(app, passport);
-require('./app/routes/html-routes.js')(app, passport);
+require("./app/routing/apiRoutes")(app, passport);
+require("./app/routing/htmlRoutes")(app, passport);
 
-//load Passport strategies
-require('./app/config/passport/passport.js')(passport, models.user);
+//Load Passport strategies
+require("./app/config/passport/passport")(passport, models.user);
 
-//Sync database and start server
+//Sync Database
 models.sequelize.sync().then(function () {
-    console.log('Nice! Database looks fine')
-    app.listen(PORT, function (err) {
-        if (!err)
-            console.log("Site is live"); else console.log(err)
+  console.log('Nice! Database looks fine')
+  app.listen(PORT, function (err) {
+      if (!err)
+          console.log("Site is live"); else console.log(err)
 
-    });
+  });
 }).catch(function (err) {
-    console.log(err, "Something went wrong with the Database Update!")
+  console.log(err, "Something went wrong with the Database Update!")
 });
-
-
-
-
-
-
