@@ -29,31 +29,18 @@
 
         <div class="container">
             <div class="row">
-                <div class="col s12 m6 offset-m3">
-                    <div class="card" id="upload-photo-card">
+                <div class="col m7 offset-m3">
+                    <div class="card horizontal">
                         <div class="card-image">
-                            <img src="http://materializecss.com/images/sample-1.jpg">
-                            <span class="card-title">Upload a photo</span>
-                            <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="far fa-upload"></i></a>
+                            <div id="my_camera"></div>
                         </div>
-                        <div class="card-content">
-                            <p>Upload a photo that includes at least one person</p>
-                        </div>
-                        <div class="card-action">
-                            <a href="#" id="uploadClick">Take a photo instead</a>
-                        </div>
-                    </div>
-                    <div class="card" id="take-photo-card">
-                        <div class="card-image">
-                            <img src="http://materializecss.com/images/sample-1.jpg">
-                            <span class="card-title">Take a photo</span>
-                            <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="far fa-upload"></i></a>
-                        </div>
-                        <div class="card-content">
-                            <p>Say cheese! The more your picture has in it, the better results we can give.</p>
-                        </div>
-                        <div class="card-action">
-                            <a href="#" id="takeClick">Upload a photo instead</a>
+                        <div class="card-stacked">
+                            <div class="card-content">
+                                <p>Take a photo with your webcam. Make sure to include at lease one face. Picture Perfect Playlist will look at you in addition to your surroundings to pick the perfect playlist basef on your shot.</p>
+                            </div>
+                            <div class="card-action">
+                                <a onClick="take_snapshot()">Take a photo</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -88,15 +75,29 @@
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script type="text/javascript" src="js/webcam.min.js"></script>
     <script type="text/javascript">
-        $("#uploadClick").click(function(){
-            $("#upload-photo-card").fadeOut();
-            $("#take-photo-card").fadeIn();
-        });
-        $("#takeClick").click(function(){
-            $("#take-photo-card").fadeOut();
-            $("#upload-photo-card").fadeIn();
-        });
+        // Set up the webcam
+        Webcam.set({
+			width: 320,
+			height: 240,
+			image_format: 'jpeg',
+			jpeg_quality: 100
+		});
+        Webcam.attach('#my_camera');
+
+        function take_snapshot() {
+			// Take snapshot and get image data
+			Webcam.snap( function(data_uri) {
+                // `data_url` is a base64 encoded
+                // Then the encoded image is sent to our upload route
+                $.ajax({
+                    url: "/upload",
+                    data: data_uri,
+                    method: "POST"
+                });
+			});
+        }
     </script>
   </body>
 </html>

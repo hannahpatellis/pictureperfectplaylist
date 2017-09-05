@@ -13,3 +13,8 @@ li.nav-memo{
 #take-photo-card{
   display:none;
 }
+.hiddenfile {
+  width: 0px;
+  height: 0px;
+  overflow: hidden;
+ }
